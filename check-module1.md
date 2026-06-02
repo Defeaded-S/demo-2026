@@ -103,6 +103,3 @@ echo "---------END---------"  >> report.txt
 clear
 cat report.txt
 ```
-ping br-srv -c4
-ping wiki -c4
-ping moodle -c4
