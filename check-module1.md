@@ -21,7 +21,7 @@ cat report.txt
 echo -e "\n\n---------HQ-RTR---------" > report.txt
 echo "hostname: $(hostname)" >> report.txt
 echo -e "interfaces:\n$(ip -4 --br a)"  >> report.txt
-echo -e "VLAN:\n$(ip -d link show | grep -B 2 'vlan protocol 802.1Q')"  >> report.txt
+echo -e "VLAN:\n$(ip -d link show | grep -B 2 'vlan protocol 802.1Q')" | awk '!/link\/ether/'  >> report.txt
 echo -e "interfaces:\n$(iptables -t nat -L)"  >> report.txt
 echo -e "NAT:\n$(sysctl -a | grep 'ip_forward ')"  >> report.txt
 echo -e "$(timedatectl)"  >> report.txt
@@ -47,6 +47,7 @@ cat report.txt
 echo -e "\n\n---------HQ-RTR---------" > report.txt
 echo "hostname: $(hostname)" >> report.txt
 echo -e "interfaces:\n$(ip -4 --br a)"  >> report.txt
+echo -e "VLAN:\n$(ip -d link show | grep -B 2 'vlan protocol 802.1Q')" | awk '!/link\/ether/'  >> report.txt
 echo -e "NAT:\n$(sysctl -a | grep 'ip_forward ')"  >> report.txt
 echo -e "$(timedatectl)"  >> report.txt
 echo "---------END---------"  >> report.txt
@@ -87,6 +88,7 @@ ssh -p 2026 172.16.100.2
 echo -e "\n\n---------HQ-RTR---------" > report.txt
 echo "hostname: $(hostname)" >> report.txt
 echo -e "interfaces:\n$(ip -4 --br a)"  >> report.txt
+echo -e "VLAN:\n$(ip -d link show | grep -B 2 'vlan protocol 802.1Q')" | awk '!/link\/ether/'  >> report.txt
 echo -e "$(host hq-rtr)"  >> report.txt
 echo -e "$(host hq-srv)"  >> report.txt
 echo -e "$(host hq-cli)"  >> report.txt
