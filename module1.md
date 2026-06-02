@@ -167,7 +167,7 @@ exit
 ```bash
 hostnamectl set-hostname hq-srv.au-team.irpo; exec bash
 useradd remote_user --uid 2026 -m
-echo P@ssw0rd | passwd remote_user --stdin
+echo "P@ssw0rd" | passwd remote_user --stdin
 usermod -aG wheel remote_user
 echo 'remote_user ALL=(ALL:ALL) NOPASSWD: ALL' >> /etc/sudoers
 cat <<EOF > /etc/net/ifaces/enp7s1/options
@@ -190,7 +190,7 @@ wait
 sed -i 's/#Port 22/Port 2026/g' /etc/openssh/sshd_config
 sed -i 's/#MaxAuthTries 6/MaxAuthTries 2/g' /etc/openssh/sshd_config
 sed -i 's/#Banner none/Banner \/etc\/openssh\/banner/g' /etc/openssh/sshd_config
-echo AllowUsers sshuser >> /etc/openssh/sshd_config
+echo AllowUsers remote_user >> /etc/openssh/sshd_config
 echo Authorized access only > /etc/openssh/banner
 systemctl restart sshd
 apt-get install -y dnsmasq
@@ -223,15 +223,15 @@ systemctl enable --now dnsmasq.service
 ```bash
 hostnamectl set-hostname br-srv.au-team.irpo; exec bash
 useradd remote_user --uid 2026 -m
-echo P@ssw0rd | passwd remote_user --stdin
+echo "P@ssw0rd" | passwd remote_user --stdin
 usermod -aG wheel remote_user
 echo 'remote_user ALL=(ALL:ALL) NOPASSWD: ALL' >> /etc/sudoers
-cat <<EOF > /etc/net/ifaces/ens18/options
+cat <<EOF > /etc/net/ifaces/enp7s1/options
 TYPE=eth
 BOOTPROTO=static
 EOF
-echo 192.168.2.2/26 > /etc/net/ifaces/ens18/ipv4address
-echo default via 192.168.2.1 > /etc/net/ifaces/ens18/ipv4route
+echo 192.168.0.2/24 > /etc/net/ifaces/enp7s1/ipv4address
+echo default via 192.168.0.1 > /etc/net/ifaces/enp7s1/ipv4route
 echo nameserver 1.1.1.1 > /etc/resolv.conf
 systemctl restart network
 wait
@@ -240,7 +240,7 @@ wait
 sed -i 's/#Port 22/Port 2026/g' /etc/openssh/sshd_config
 sed -i 's/#MaxAuthTries 6/MaxAuthTries 2/g' /etc/openssh/sshd_config
 sed -i 's/#Banner none/Banner \/etc\/openssh\/banner/g' /etc/openssh/sshd_config
-echo AllowUsers sshuser >> /etc/openssh/sshd_config
+echo AllowUsers remote_user >> /etc/openssh/sshd_config
 echo Authorized access only > /etc/openssh/banner
 systemctl restart sshd
 ```
